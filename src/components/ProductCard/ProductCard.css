@@ -38,3 +38,14 @@
 .add-to-cart:hover {
   background-color: #0b5ed7;
 }
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-card-link:hover .product-card {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
