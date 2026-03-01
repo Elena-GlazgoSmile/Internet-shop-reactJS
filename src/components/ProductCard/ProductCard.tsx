@@ -16,7 +16,10 @@ const ProductCard = ({ id, name, price, image, description }: ProductCardProps) 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart({ id, name, price, image, description, quantity: 1 });
+    addToCart({
+      id, name, price, image, description, quantity: 1,
+      category: ''
+    });
   };
 
   return (

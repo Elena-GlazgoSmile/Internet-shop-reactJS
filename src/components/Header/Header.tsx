@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
+import Categories from '../Categories/Categories';
+import Search from '../Search/Search';
 import './Header.css';
 
 const Header = () => {
@@ -18,6 +20,8 @@ const Header = () => {
           Корзина {cartItemsCount > 0 && `(${cartItemsCount})`}
         </Link>
       </nav>
+      <Categories />
+      <Search />
     </header>
   );
 };

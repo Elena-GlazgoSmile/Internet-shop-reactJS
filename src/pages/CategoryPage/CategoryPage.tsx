@@ -1,6 +1,8 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import './Home.css';
+import Categories from '../../components/Categories/Categories';
+import './CategoryPage.css';
 
 const products = [
   { 
@@ -8,7 +10,7 @@ const products = [
     name: 'Кружка "Программист"', 
     price: 790, 
     description: 'Идеальная кружка для тех, кто пьёт кофе и пишет код.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Кружка',
+    image: 'https://placehold.co/200x200/0d6efd/white?text=Кружка',
     category: 'посуда'
   },
   { 
@@ -16,7 +18,7 @@ const products = [
     name: 'Футболка React', 
     price: 1590, 
     description: 'Футболка с логотипом React. 100% хлопок.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=React',
+    image: 'https://placehold.co/200x200/0d6efd/white?text=React',
     category: 'одежда'
   },
   { 
@@ -24,7 +26,7 @@ const products = [
     name: 'Блокнот для кода', 
     price: 390, 
     description: 'Блокнот в клетку 80 листов для идей и алгоритмов.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Блокнот',
+    image: 'https://placehold.co/200x200/0d6efd/white?text=Блокнот',
     category: 'канцелярия'
   },
   { 
@@ -32,12 +34,14 @@ const products = [
     name: 'Стикеры JS', 
     price: 290, 
     description: 'Набор стикеров с JavaScript мемами.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=JS',
+    image: 'https://placehold.co/200x200/0d6efd/white?text=JS',
     category: 'канцелярия'
   },
 ];
 
-const Home = () => {
+const CategoryPage = () => {
+  const { categoryName } = useParams<{ categoryName: string }>();
+
   const [sortBy, setSortBy] = useState(() => {
     const savedSort = localStorage.getItem('sortBy');
     return savedSort || 'default';
@@ -69,7 +73,9 @@ const Home = () => {
     setMaxPrice('');
   };
 
-  const filteredProducts = products.filter(product => {
+  const categoryProducts = products.filter(p => p.category === categoryName);
+
+  const filteredProducts = categoryProducts.filter(product => {
     if (minPrice !== '' && product.price < minPrice) return false;
     if (maxPrice !== '' && product.price > maxPrice) return false;
     return true;
@@ -101,7 +107,15 @@ const Home = () => {
   const sortedProducts = getSortedProducts();
 
   return (
-    <div className="home">
+    <div className="category-page">
+      <Categories />
+      
+      <h1 className="category-title">
+        {categoryName === 'посуда' && 'Посуда'}
+        {categoryName === 'одежда' && 'Одежда'}
+        {categoryName === 'канцелярия' && 'Канцелярия'}
+      </h1>
+
       <div className="filter-sort-bar">
         <div className="filter-group">
           <label>Цена:</label>
@@ -142,10 +156,8 @@ const Home = () => {
         </div>
       </div>
 
-      <h1>Каталог товаров</h1>
-
       {sortedProducts.length === 0 ? (
-        <p className="no-products">Товаров не найдено</p>
+        <p className="no-products">В этой категории нет товаров</p>
       ) : (
         <div className="products-grid">
           {sortedProducts.map(product => (
@@ -157,4 +169,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CategoryPage;

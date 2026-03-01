@@ -9,6 +9,11 @@ const Cart = () => {
     0
   );
 
+  const handleClearCart = () => {
+    clearCart();
+    window.location.reload();
+  };
+
   if (items.length === 0) {
     return (
       <div className="cart-empty">
@@ -55,7 +60,7 @@ const Cart = () => {
       </div>
       <div className="cart-total">
         <h3>Итого: {totalPrice} ₽</h3>
-        <button className="clear-cart" onClick={clearCart}>
+        <button className="clear-cart" onClick={handleClearCart}>
           Очистить корзину
         </button>
       </div>

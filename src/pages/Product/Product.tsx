@@ -1,4 +1,5 @@
-﻿import { useParams, Link } from 'react-router-dom';
+﻿import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
+import { useParams, Link } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
 import './Product.css';
 
@@ -49,28 +50,34 @@ const Product = () => {
   }
 
   const handleAddToCart = () => {
-    addToCart({ ...product, quantity: 1 });
+    addToCart({
+      ...product, quantity: 1,
+      category: ''
+    });
   };
 
   return (
-    <div className="product-page">
-      <div className="product-container">
-        <div className="product-image-section">
-          <img src={product.image} alt={product.name} className="product-detail-image" />
-        </div>
-        <div className="product-info-section">
-          <h1 className="product-title">{product.name}</h1>
-          <p className="product-description">{product.description}</p>
-          <p className="product-detail-price">{product.price} ₽</p>
-          <button className="add-to-cart-large" onClick={handleAddToCart}>
-            Добавить в корзину
-          </button>
-          <Link to="/" className="back-to-catalog">
-            ← Вернуться в каталог
-          </Link>
+    <>
+      <div className="product-page">
+        <div className="product-container">
+          <div className="product-image-section">
+            <img src={product.image} alt={product.name} className="product-detail-image" />
+          </div>
+          <div className="product-info-section">
+            <h1 className="product-title">{product.name}</h1>
+            <p className="product-description">{product.description}</p>
+            <p className="product-detail-price">{product.price} ₽</p>
+            <button className="add-to-cart-large" onClick={handleAddToCart}>
+              Добавить в корзину
+            </button>
+            <Link to="/" className="back-to-catalog">
+              ← Вернуться в каталог
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+      <RelatedProducts currentProductId={product.id} />
+    </>
   );
 };
 
