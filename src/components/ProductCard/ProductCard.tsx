@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
+import useFavoritesStore from '../../store/favoritesStore';
 import './ProductCard.css';
 
 type ProductCardProps = {
@@ -12,6 +13,7 @@ type ProductCardProps = {
 
 const ProductCard = ({ id, name, price, image, description }: ProductCardProps) => {
   const addToCart = useCartStore((state) => state.addToCart);
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,9 +24,21 @@ const ProductCard = ({ id, name, price, image, description }: ProductCardProps) 
     });
   };
 
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite({ id, name, price, image, description, category: 'temp' });
+  };
+
   return (
     <Link to={`/product/${id}`} className="product-card-link">
       <div className="product-card">
+        <button 
+          className={`favorite-button ${isFavorite(id) ? 'active' : ''}`}
+          onClick={handleToggleFavorite}
+        >
+          {isFavorite(id) ? '❤️' : '🤍'}
+        </button>
         <img src={image} alt={name} className="product-image" />
         <h3>{name}</h3>
         <p className="price">{price} ₽</p>

@@ -1,3 +1,4 @@
+import Favorites from '../pages/Favorites/Favorites';
 import SearchPage from '../pages/SearchPage/SearchPage';
 import CategoryPage from '../pages/CategoryPage/CategoryPage';
 import { createBrowserRouter } from 'react-router-dom';
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
       { path: 'category/:categoryName', element: <CategoryPage /> },
       { path: 'search', element: <SearchPage /> },
+      { path: 'favorites', element: <Favorites /> },
     ],
   },
 ]);
