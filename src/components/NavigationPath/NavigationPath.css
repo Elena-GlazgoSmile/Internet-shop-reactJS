@@ -1,0 +1,31 @@
+.navigationPath {
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  background-color: #2d2d3a;
+  border-radius: 8px;
+  color: #b0b0b0;
+  font-size: 0.95rem;
+  border: 1px solid #3d3d4a;
+}
+
+.navigationPath-link {
+  color: #a78bfa;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navigationPath-link:hover {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
+
+.navigationPath-current {
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.navigationPath-separator {
+  margin: 0 10px;
+  color: #6f42c1;
+  font-size: 1.2rem;
+}

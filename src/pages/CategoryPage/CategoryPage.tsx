@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import Categories from '../../components/Categories/Categories';
@@ -108,6 +109,7 @@ const CategoryPage = () => {
 
   return (
     <div className="category-page">
+      <NavigationPath />
       <Categories />
       
       <h1 className="category-title">

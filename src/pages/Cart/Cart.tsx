@@ -1,4 +1,5 @@
 ﻿import useCartStore from '../../store/cartStore';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import './Cart.css';
 
 const Cart = () => {
@@ -17,6 +18,7 @@ const Cart = () => {
   if (items.length === 0) {
     return (
       <div className="cart-empty">
+        <NavigationPath />
         <h2>Корзина пуста</h2>
         <p>Добавьте товары из каталога</p>
       </div>
@@ -25,6 +27,7 @@ const Cart = () => {
 
   return (
     <div className="cart">
+      <NavigationPath />
       <h1>Корзина</h1>
       <div className="cart-items">
         {items.map((item) => (

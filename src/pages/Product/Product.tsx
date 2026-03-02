@@ -1,4 +1,5 @@
 ﻿import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import { useParams, Link } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
 import './Product.css';
@@ -59,6 +60,7 @@ const Product = () => {
   return (
     <>
       <div className="product-page">
+        <NavigationPath />
         <div className="product-container">
           <div className="product-image-section">
             <img src={product.image} alt={product.name} className="product-detail-image" />

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import useFavoritesStore from '../../store/favoritesStore';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import './Favorites.css';
@@ -14,6 +15,7 @@ const Favorites = () => {
   if (items.length === 0) {
     return (
       <div className="favorites-empty">
+        <NavigationPath />
         <h2>Избранное пусто</h2>
         <p>Добавляйте товары в избранное, чтобы не потерять</p>
         <Link to="/" className="back-link">Вернуться в каталог</Link>
@@ -23,6 +25,7 @@ const Favorites = () => {
 
   return (
     <div className="favorites">
+      <NavigationPath />
       <h1>Избранное</h1>
       <button onClick={handleClearFavorites} className="clear-favorites">
         Очистить всё
