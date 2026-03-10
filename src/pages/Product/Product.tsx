@@ -1,47 +1,49 @@
-﻿import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
-import NavigationPath from '../../components/NavigationPath/NavigationPath';
+﻿import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
+import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 import useCartStore from '../../store/cartStore';
+import { getProduct, type Product as ProductType } from '../../api/products';
 import './Product.css';
-
-const products = [
-  { 
-    id: 1, 
-    name: 'Кружка "Программист"', 
-    price: 790, 
-    description: 'Идеальная кружка для тех, кто пьёт кофе и пишет код. Не боится горячих напитков и сложных алгоритмов.',
-    image: 'https://placehold.co/400x400/0d6efd/white?text=Кружка' 
-  },
-  { 
-    id: 2, 
-    name: 'Футболка React', 
-    price: 1590, 
-    description: 'Футболка с логотипом React. 100% хлопок, дышащая, удобная. Для настоящих фанатов компонентов и хуков.',
-    image: 'https://placehold.co/400x400/0d6efd/white?text=React' 
-  },
-  { 
-    id: 3, 
-    name: 'Блокнот для кода', 
-    price: 390, 
-    description: 'Блокнот в клетку 80 листов. Удобно записывать алгоритмы, сниппеты и идеи для проектов.',
-    image: 'https://placehold.co/400x400/0d6efd/white?text=Блокнот' 
-  },
-  { 
-    id: 4, 
-    name: 'Стикеры JS', 
-    price: 290, 
-    description: 'Набор стикеров с JavaScript мемами. Укрась ноутбук и порадуй коллег.',
-    image: 'https://placehold.co/400x400/0d6efd/white?text=JS' 
-  },
-];
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<ProductType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const addToCart = useCartStore((state) => state.addToCart);
-  
-  const product = products.find(p => p.id === Number(id));
 
-  if (!product) {
+  useEffect(() => {
+    if (!id) return;
+    
+    getProduct(parseInt(id))
+      .then(data => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [id]);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        description: product.description,
+        quantity: 1,
+        category: product.category?.name || ''
+      });
+    }
+  };
+
+  if (loading) return <div className="loading">Загрузка товара...</div>;
+  
+  if (error || !product) {
     return (
       <div className="not-found">
         <h2>Товар не найден</h2>
@@ -49,13 +51,6 @@ const Product = () => {
       </div>
     );
   }
-
-  const handleAddToCart = () => {
-    addToCart({
-      ...product, quantity: 1,
-      category: ''
-    });
-  };
 
   return (
     <>
@@ -78,7 +73,10 @@ const Product = () => {
           </div>
         </div>
       </div>
-      <RelatedProducts currentProductId={product.id} />
+      <RelatedProducts 
+        currentProductId={product.id} 
+        categoryId={product.categoryId}
+      />
     </>
   );
 };

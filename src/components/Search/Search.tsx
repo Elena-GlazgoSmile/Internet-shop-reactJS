@@ -34,7 +34,7 @@ const Search = () => {
         className="search-toggle"
         onClick={() => setIsOpen(!isOpen)}
       >
-        🔍
+          <img src="images/search_icon.jpg" alt="Поиск" className="search-icon" />
       </button>
 
       {isOpen && (

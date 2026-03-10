@@ -1,43 +1,13 @@
 ﻿import { useState, useEffect } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import { getProducts, type Product } from '../../api/products';
 import './Home.css';
 
-const products = [
-  { 
-    id: 1, 
-    name: 'Кружка "Программист"', 
-    price: 790, 
-    description: 'Идеальная кружка для тех, кто пьёт кофе и пишет код.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Кружка',
-    category: 'посуда'
-  },
-  { 
-    id: 2, 
-    name: 'Футболка React', 
-    price: 1590, 
-    description: 'Футболка с логотипом React. 100% хлопок.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=React',
-    category: 'одежда'
-  },
-  { 
-    id: 3, 
-    name: 'Блокнот для кода', 
-    price: 390, 
-    description: 'Блокнот в клетку 80 листов для идей и алгоритмов.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Блокнот',
-    category: 'канцелярия'
-  },
-  { 
-    id: 4, 
-    name: 'Стикеры JS', 
-    price: 290, 
-    description: 'Набор стикеров с JavaScript мемами.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=JS',
-    category: 'канцелярия'
-  },
-];
-
 const Home = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   const [sortBy, setSortBy] = useState(() => {
     const savedSort = localStorage.getItem('sortBy');
     return savedSort || 'default';
@@ -51,6 +21,18 @@ const Home = () => {
     const savedMax = localStorage.getItem('maxPrice');
     return savedMax ? Number(savedMax) : '';
   });
+
+  useEffect(() => {
+    getProducts()
+      .then(data => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('sortBy', sortBy);
@@ -99,6 +81,9 @@ const Home = () => {
   };
 
   const sortedProducts = getSortedProducts();
+
+  if (loading) return <div className="loading">Загрузка товаров...</div>;
+  if (error) return <div className="error">Ошибка: {error}</div>;
 
   return (
     <div className="home">

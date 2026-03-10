@@ -1,29 +1,82 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { getCategories, type Category } from '../../api/categories';
 import './Categories.css';
 
-type CategoriesProps = {
-  selectedCategory?: string;
-  onCategoryChange?: (category: string) => void;
-};
+const Categories = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-const Categories = ({ selectedCategory, onCategoryChange }: CategoriesProps) => {
-  const categories = [
-    { id: 'all', name: 'Все товары', path: '/' },
-    { id: 'посуда', name: 'Посуда', path: '/category/посуда' },
-    { id: 'одежда', name: 'Одежда', path: '/category/одежда' },
-    { id: 'канцелярия', name: 'Канцелярия', path: '/category/канцелярия' },
-  ];
+  useEffect(() => {
+    getCategories()
+      .then(data => {
+        setCategories(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Ошибка загрузки категорий:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (loading) return <div className="categories-loading">...</div>;
+
+  if (isMobile) {
+    return (
+      <div className="categories-dropdown">
+        <button 
+          className="dropdown-button" 
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Категории</span>
+          <span style={{ transform: `rotate(${isOpen ? '180deg' : '0'})`, transition: 'transform 0.3s' }}>▼</span>
+        </button>
+        
+        {isOpen && (
+          <div className="dropdown-menu">
+            <NavLink to="/" onClick={() => setIsOpen(false)}>
+              Все товары
+            </NavLink>
+            {categories.map(cat => (
+              <NavLink
+                key={cat.id}
+                to={`/category/${cat.id}`}
+                onClick={() => setIsOpen(false)}
+              >
+                {cat.name}
+              </NavLink>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="categories">
+      <NavLink to="/" className={({ isActive }) => 
+        `category-link ${isActive ? 'active' : ''}`
+      }>
+        Все товары
+      </NavLink>
+      
       {categories.map(cat => (
         <NavLink
           key={cat.id}
-          to={cat.path}
+          to={`/category/${cat.id}`}
           className={({ isActive }) => 
             `category-link ${isActive ? 'active' : ''}`
           }
-          onClick={() => onCategoryChange?.(cat.id)}
         >
           {cat.name}
         </NavLink>

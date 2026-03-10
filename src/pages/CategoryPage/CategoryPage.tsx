@@ -1,47 +1,17 @@
 import { useState, useEffect } from 'react';
-import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import { useParams } from 'react-router-dom';
+import NavigationPath from '../../components/NavigationPath/NavigationPath';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import Categories from '../../components/Categories/Categories';
+import { getProductsByCategory, type Product } from '../../api/categories';
 import './CategoryPage.css';
 
-const products = [
-  { 
-    id: 1, 
-    name: 'Кружка "Программист"', 
-    price: 790, 
-    description: 'Идеальная кружка для тех, кто пьёт кофе и пишет код.',
-    image: 'https://placehold.co/200x200/0d6efd/white?text=Кружка',
-    category: 'посуда'
-  },
-  { 
-    id: 2, 
-    name: 'Футболка React', 
-    price: 1590, 
-    description: 'Футболка с логотипом React. 100% хлопок.',
-    image: 'https://placehold.co/200x200/0d6efd/white?text=React',
-    category: 'одежда'
-  },
-  { 
-    id: 3, 
-    name: 'Блокнот для кода', 
-    price: 390, 
-    description: 'Блокнот в клетку 80 листов для идей и алгоритмов.',
-    image: 'https://placehold.co/200x200/0d6efd/white?text=Блокнот',
-    category: 'канцелярия'
-  },
-  { 
-    id: 4, 
-    name: 'Стикеры JS', 
-    price: 290, 
-    description: 'Набор стикеров с JavaScript мемами.',
-    image: 'https://placehold.co/200x200/0d6efd/white?text=JS',
-    category: 'канцелярия'
-  },
-];
-
 const CategoryPage = () => {
-  const { categoryName } = useParams<{ categoryName: string }>();
+  const { id } = useParams<{ id: string }>();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [categoryName, setCategoryName] = useState('');
 
   const [sortBy, setSortBy] = useState(() => {
     const savedSort = localStorage.getItem('sortBy');
@@ -56,6 +26,23 @@ const CategoryPage = () => {
     const savedMax = localStorage.getItem('maxPrice');
     return savedMax ? Number(savedMax) : '';
   });
+
+  useEffect(() => {
+    if (!id) return;
+    
+    getProductsByCategory(parseInt(id))
+      .then(data => {
+        setProducts(data);
+        if (data.length > 0 && data[0].category) {
+          setCategoryName(data[0].category.name);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Ошибка загрузки товаров');
+        setLoading(false);
+      });
+  }, [id]);
 
   useEffect(() => {
     localStorage.setItem('sortBy', sortBy);
@@ -74,9 +61,7 @@ const CategoryPage = () => {
     setMaxPrice('');
   };
 
-  const categoryProducts = products.filter(p => p.category === categoryName);
-
-  const filteredProducts = categoryProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     if (minPrice !== '' && product.price < minPrice) return false;
     if (maxPrice !== '' && product.price > maxPrice) return false;
     return true;
@@ -107,16 +92,15 @@ const CategoryPage = () => {
 
   const sortedProducts = getSortedProducts();
 
+  if (loading) return <div className="loading">Загрузка...</div>;
+  if (error) return <div className="error">{error}</div>;
+  console.log('CategoryPage state:', { loading, products, sortedProducts, error });
   return (
     <div className="category-page">
       <NavigationPath />
       <Categories />
       
-      <h1 className="category-title">
-        {categoryName === 'посуда' && 'Посуда'}
-        {categoryName === 'одежда' && 'Одежда'}
-        {categoryName === 'канцелярия' && 'Канцелярия'}
-      </h1>
+      <h1 className="category-title">{categoryName}</h1>
 
       <div className="filter-sort-bar">
         <div className="filter-group">

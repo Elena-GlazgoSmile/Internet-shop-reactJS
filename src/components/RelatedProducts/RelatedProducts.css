@@ -1,15 +1,35 @@
 .related-products {
-  margin-top: 60px;
-  padding-top: 40px;
-  border-top: 1px solid var(--border-color);
+  margin-top: 80px;
+  padding: 40px 20px;
+  background: rgba(30, 30, 40, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 30px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.related-products::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.1), transparent 50%);
+  pointer-events: none;
 }
 
 .related-title {
   color: var(--text-primary);
-  font-size: 1.5rem;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  margin-bottom: 40px;
   text-align: center;
   position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
 }
 
 .related-title::after {
@@ -18,52 +38,146 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  width: 150px;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--accent-primary), 
+    #c4b5fd,
+    var(--accent-primary), 
+    transparent
+  );
+  border-radius: 3px;
 }
 
 .related-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 24px;
-  max-width: 800px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .related-card {
   text-decoration: none;
   color: inherit;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 16px;
+  background: rgba(30, 30, 40, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 20px 16px;
   text-align: center;
-  transition: var(--transition);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.related-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.2),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.related-card:hover::before {
+  left: 100%;
 }
 
 .related-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px) scale(1.02);
   border-color: var(--accent-primary);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 
+    0 10px 30px rgba(139, 92, 246, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.related-image-container {
+  width: 100%;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .related-image {
   width: 100%;
-  max-width: 150px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  border: 1px solid var(--border-color);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  transition: transform 0.4s;
+  border-radius: 12px;
+}
+
+.related-card:hover .related-image {
+  transform: scale(1.08);
 }
 
 .related-name {
   color: var(--text-primary);
-  font-size: 1rem;
-  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  margin: 12px 0 8px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .related-price {
   color: var(--accent-primary);
-  font-weight: bold;
-  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 8px 0;
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+
+.related-category {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.related-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .related-products {
+    margin-top: 40px;
+    padding: 30px 15px;
+  }
+
+  .related-title {
+    font-size: 1.5rem;
+  }
+
+  .related-grid {
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .related-card {
+    padding: 12px;
+  }
+
+  .related-name {
+    font-size: 0.9rem;
+  }
+
+  .related-price {
+    font-size: 1rem;
+  }
 }
