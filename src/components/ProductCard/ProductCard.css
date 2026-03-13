@@ -94,21 +94,56 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  z-index: 2;
-  transition: transform 0.2s;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  z-index: 10;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
 .favorite-button:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+  background: rgba(139, 92, 246, 0.3);
+  border-color: var(--accent-primary);
 }
 
 .favorite-button.active {
-  animation: heartBeat 0.3s;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.favorite-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s;
+}
+
+.favorite-button:hover .favorite-icon {
+  transform: scale(1.1);
+}
+
+.favorite-button.active {
+  animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.favorite-button:not(.active) {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 @keyframes heartBeat {

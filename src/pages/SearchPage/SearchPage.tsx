@@ -1,49 +1,35 @@
+import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import { getProducts, type Product } from '../../api/products';
 import './SearchPage.css';
-
-const products = [
-  { 
-    id: 1, 
-    name: 'Кружка "Программист"', 
-    price: 790, 
-    description: 'Идеальная кружка для тех, кто пьёт кофе и пишет код.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Кружка',
-    category: 'посуда'
-  },
-  { 
-    id: 2, 
-    name: 'Футболка React', 
-    price: 1590, 
-    description: 'Футболка с логотипом React. 100% хлопок.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=React',
-    category: 'одежда'
-  },
-  { 
-    id: 3, 
-    name: 'Блокнот для кода', 
-    price: 390, 
-    description: 'Блокнот в клетку 80 листов для идей и алгоритмов.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=Блокнот',
-    category: 'канцелярия'
-  },
-  { 
-    id: 4, 
-    name: 'Стикеры JS', 
-    price: 290, 
-    description: 'Набор стикеров с JavaScript мемами.',
-    image: 'https://placehold.co/200x200/6f42c1/white?text=JS',
-    category: 'канцелярия'
-  },
-];
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
+  
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const searchResults = products.filter(product =>
+  useEffect(() => {
+    getProducts()
+      .then(data => {
+        setAllProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Ошибка загрузки товаров');
+        setLoading(false);
+      });
+  }, []);
+
+  const searchResults = allProducts.filter(product =>
     product.name.toLowerCase().includes(query.toLowerCase())
   );
+
+  if (loading) return <div className="loading">Загрузка...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="search-page">

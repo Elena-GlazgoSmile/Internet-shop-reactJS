@@ -30,7 +30,7 @@ const Header = () => {
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="logo">
-        <Link to="/">Мой магазин</Link>
+        <Link to="/">Ништяки</Link>
       </div>
       
       <nav className="nav">

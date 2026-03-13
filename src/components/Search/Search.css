@@ -84,3 +84,125 @@
   display: block;
   filter: brightness(0) invert(1);
 }
+
+/* Стили для страницы поиска */
+.search-page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 60vh;
+}
+
+.search-title {
+  color: var(--text-primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.search-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+
+.search-query {
+  color: var(--accent-primary);
+  font-weight: 600;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 5px 15px;
+  border-radius: 30px;
+  display: inline-block;
+  margin-left: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.results-count {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  max-width: 500px;
+  margin: 40px auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.no-results-text {
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.no-results-text::before {
+  content: 'Такого пока нет';
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.back-home {
+  display: inline-block;
+  padding: 12px 30px;
+  background: var(--accent-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.back-home:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+  .search-title {
+    font-size: 1.5rem;
+  }
+  
+  .search-query {
+    display: block;
+    margin: 10px auto 0;
+    max-width: fit-content;
+  }
+  
+  .no-results {
+    margin: 20px 15px;
+    padding: 40px 15px;
+  }
+  
+  .no-results-text::before {
+    font-size: 2.5rem;
+  }
+  
+  .back-home {
+    padding: 10px 25px;
+  }
+}
